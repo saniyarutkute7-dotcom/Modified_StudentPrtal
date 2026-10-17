@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="portal.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Portal Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f4f6f9;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 380px;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1e3a8a;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #1e3a8a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .error {
+            display: none;
+            color: red;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <h1>Student Portal</h1>
+
+        <p class="subtitle">Login to continue</p>
+
+        <form id="loginForm">
+
+            <label for="username">Username</label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter username"
+                required
+            >
+
+            <label for="password">Password</label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                required
+            >
+
+            <button type="submit">LOGIN</button>
+
+            <p class="error" id="errorMessage">
+                Incorrect username or password.
+            </p>
+
+            <p style="text-align:center; margin-top:18px; font-size:14px; color:#666;">
+                Common login for all students. After verification, enter your own student information.
+            </p>
+
+        </form>
+
+    </div>
+
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const errorMessage = document.getElementById("errorMessage");
+
+            errorMessage.style.display = "none";
+
+            Portal.commonLogin(username, password).then(function (result) {
+                if (result.ok) {
+                    // The common gate is successful. The student now selects
+                    // or creates their own profile in login.html.
+                    window.location.replace("login.html");
+                } else {
+                    errorMessage.textContent = "Invalid username or password.";
+                    errorMessage.style.display = "block";
+                }
+            }).catch(function () {
+                errorMessage.textContent = "Unable to verify login. Please try again.";
+                errorMessage.style.display = "block";
+            });
+        });
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js");
+        }
+</script>
+
+</body>
+
+</html>

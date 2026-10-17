@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="portal.js"></script>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+
+<title>Student Study Portal - Timetable</title>
+
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    color:#333;
+}
+
+
+/* NAVBAR */
+
+nav{
+    background:#243b55;
+    padding:18px 30px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.nav-links{
+    display:flex;
+    gap:25px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    font-size:15px;
+}
+
+.nav-links a:hover{
+    color:#bcd4f6;
+}
+
+
+/* HEADER */
+
+.page-header{
+    text-align:center;
+    padding:40px 20px 25px;
+}
+
+.page-header h1{
+    color:#243b55;
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+.page-header p{
+    color:#666;
+}
+
+
+/* ADD EVENT BOX */
+
+.schedule-box{
+    width:90%;
+    max-width:700px;
+
+    margin:0 auto 35px;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.schedule-box h2{
+    color:#243b55;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+
+    font-weight:bold;
+
+    margin-top:15px;
+    margin-bottom:8px;
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #ccc;
+
+    border-radius:7px;
+
+    font-size:15px;
+}
+
+textarea{
+    resize:vertical;
+    min-height:80px;
+}
+
+.save-btn{
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:7px;
+
+    background:#243b55;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+}
+
+.save-btn:hover{
+    background:#162b40;
+}
+
+
+/* REMINDER BUTTON */
+
+.notification-btn{
+
+    width:100%;
+
+    margin-top:10px;
+
+    padding:11px;
+
+    border:none;
+
+    border-radius:7px;
+
+    background:#2874a6;
+
+    color:white;
+
+    cursor:pointer;
+}
+
+.notification-btn:hover{
+    background:#1f5d85;
+}
+
+
+/* SCHEDULE SECTION */
+
+.schedule-section{
+
+    width:90%;
+    max-width:900px;
+
+    margin:auto;
+
+    padding-bottom:50px;
+}
+
+.schedule-section h2{
+
+    text-align:center;
+
+    color:#243b55;
+
+    margin-bottom:25px;
+}
+
+
+/* EVENT CARD */
+
+.event-card{
+
+    background:white;
+
+    padding:20px;
+
+    margin-bottom:15px;
+
+    border-radius:12px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+
+}
+
+.event-card h3{
+
+    color:#243b55;
+
+    margin-bottom:12px;
+}
+
+.event-card p{
+
+    margin:7px 0;
+
+    color:#555;
+
+}
+
+.event-type{
+
+    display:inline-block;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+
+    background:#eef4fb;
+
+    color:#243b55;
+
+    font-size:13px;
+
+    margin-bottom:10px;
+}
+
+.upcoming{
+
+    color:#2874a6;
+
+    font-weight:bold;
+}
+
+.past{
+
+    color:#777;
+
+}
+
+.delete-btn{
+
+    margin-top:12px;
+
+    background:#c0392b;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 14px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+}
+
+.no-events{
+
+    background:white;
+
+    padding:25px;
+
+    text-align:center;
+
+    color:#777;
+
+    border-radius:12px;
+}
+
+
+/* FOOTER */
+
+footer{
+
+    background:#243b55;
+
+    color:white;
+
+    text-align:center;
+
+    padding:18px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    nav{
+
+        flex-direction:column;
+        gap:15px;
+
+    }
+
+    .nav-links{
+
+        gap:15px;
+
+        flex-wrap:wrap;
+
+        justify-content:center;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav>
+
+    <div class="logo">
+        Student Study Portal
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="home.html">
+            Home
+        </a>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="profile.html">
+            Profile
+        </a>
+
+        <a href="#" onclick="logout()">
+            Logout 
+     
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- HEADER -->
+
+<section class="page-header">
+
+    <h1>🕐 Timetable & Reminders</h1>
+
+    <p>
+        Manage your exams, daily schedule and important work
+    </p>
+
+</section>
+
+
+<!-- ADD SCHEDULE -->
+
+<section class="schedule-box">
+
+    <h2>
+        Add Schedule
+    </h2>
+
+
+    <label for="eventType">
+        Type
+    </label>
+
+    <select id="eventType">
+
+        <option value="Exam">
+            📝 Exam
+        </option>
+
+        <option value="Daily Schedule">
+            📚 Daily Schedule
+        </option>
+
+        <option value="Important Work">
+            ⭐ Important Work
+        </option>
+
+    </select>
+
+
+    <label for="title">
+        Title
+    </label>
+
+    <input
+        type="text"
+        id="title"
+        placeholder="Example: DBMS Exam"
+    >
+
+
+    <label for="day">
+        Day
+    </label>
+
+    <select id="day">
+        <option value="">Select Day</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+        <option value="Sunday">Sunday</option>
+    </select>
+
+
+    <label for="date">
+        Date
+    </label>
+
+    <input
+        type="date"
+        id="date"
+    >
+
+
+    <label for="time">
+        Time
+    </label>
+
+    <input
+        type="time"
+        id="time"
+    >
+
+
+    <label for="description">
+        Description
+    </label>
+
+    <textarea
+        id="description"
+        placeholder="Example: Prepare Unit 1, Unit 2 and Unit 3"
+    ></textarea>
+
+
+    <label for="reminder">
+        Remind me before
+    </label>
+
+    <select id="reminder">
+
+        <option value="0">
+            At the scheduled time
+        </option>
+
+        <option value="5">
+            5 minutes before
+        </option>
+
+        <option value="10">
+            10 minutes before
+        </option>
+
+        <option value="15">
+            15 minutes before
+        </option>
+
+        <option value="30">
+            30 minutes before
+        </option>
+
+        <option value="60">
+            1 hour before
+        </option>
+
+        <option value="1440">
+            1 day before
+        </option>
+
+    </select>
+
+
+    <button
+        class="save-btn"
+        onclick="saveSchedule()"
+    >
+        Save Schedule
+    </button>
+
+
+    <button
+        class="notification-btn"
+        onclick="enableNotifications()"
+    >
+        🔔 Enable Reminders
+    </button>
+
+</section>
+
+
+<!-- SAVED SCHEDULE -->
+
+<section class="schedule-section">
+
+    <h2>
+        📅 My Schedule
+    </h2>
+
+
+    <div id="scheduleList"></div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 Student Study Portal | BCA
+    </p>
+
+</footer>
+
+
+<script>
+"use strict";
+
+/* ---------- CURRENT STUDENT ---------- */
+var currentUsername = (window.Portal && Portal.getCurrentUsername) ? Portal.getCurrentUsername() : "";
+var student = currentUsername && window.Portal ? Portal.getStudentProfile(currentUsername) : null;
+
+if (!student || localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.replace("index.html");
+} else {
+    /* Keep timetable data explicitly tagged with the account as an extra
+       safeguard, even though portal.js already namespaces localStorage. */
+    var schedules = [];
+    var scheduleStorageKey = "schedules";
+    try {
+        schedules = JSON.parse(localStorage.getItem(scheduleStorageKey)) || [];
+        if (!Array.isArray(schedules)) schedules = [];
+    } catch (e) {
+        schedules = [];
+    }
+    schedules = schedules.filter(function (item) {
+        return !item.account || item.account === currentUsername;
+    });
+
+    function logout() {
+        Portal.logout();
+        window.location.replace("index.html");
+    }
+
+    function saveSchedules() {
+        localStorage.setItem(scheduleStorageKey, JSON.stringify(schedules));
+    }
+
+    /* ---------- NOTIFICATIONS ---------- */
+    function enableNotifications() {
+        if (!("Notification" in window)) {
+            alert("Browser notifications are not supported. The Student Portal popup reminder will still work while this page is open.");
+            return;
+        }
+        if (Notification.permission === "granted") {
+            alert("Browser reminders are already enabled.");
+            return;
+        }
+        if (Notification.permission === "denied") {
+            alert("Browser notifications are blocked. The Student Portal popup reminder will still work.");
+            return;
+        }
+        try {
+            var request = Notification.requestPermission();
+            if (request && typeof request.then === "function") {
+                request.then(function (permission) {
+                    if (permission === "granted") {
+                        alert("Browser reminders enabled successfully.");
+                    } else {
+                        alert("Notification permission was not allowed. Popup reminders will still work.");
+                    }
+                }).catch(function () {
+                    alert("Notification permission could not be requested. Popup reminders will still work.");
+                });
+            }
+        } catch (e) {
+            alert("Browser notification permission could not be requested. Popup reminders will still work.");
+        }
+    }
+
+    function sendBrowserNotification(item, message) {
+        if (!("Notification" in window) || Notification.permission !== "granted") return false;
+        try {
+            new Notification("Student Portal Reminder", { body: message, icon: "icon.png" });
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function showPopupReminder(item) {
+        var message = "Reminder: " + item.title + " starts at " + item.time + ".";
+        var browserSent = sendBrowserNotification(item, message);
+        /* Always show a normal JavaScript popup when browser notifications are
+           unavailable, denied, or fail. This is the guaranteed fallback. */
+        if (!browserSent) {
+            alert("🔔 Student Portal Reminder\n\n" + message);
+        }
+    }
+
+    /* ---------- SAVE SCHEDULE ---------- */
+    function saveSchedule() {
+        var eventType = document.getElementById("eventType").value;
+        var title = document.getElementById("title").value.trim();
+        var day = document.getElementById("day").value;
+        var date = document.getElementById("date").value;
+        var time = document.getElementById("time").value;
+        var description = document.getElementById("description").value.trim();
+        var reminder = Number(document.getElementById("reminder").value);
+
+        if (!title) { alert("Please enter a subject/class or task title."); return; }
+        if (!day) { alert("Please select a day."); return; }
+        if (!date) { alert("Please select a date."); return; }
+        if (!time) { alert("Please select a time."); return; }
+
+        var scheduleDate = new Date(date + "T" + time);
+        if (isNaN(scheduleDate.getTime()) || scheduleDate.getTime() <= Date.now()) {
+            alert("Please select a future date and time.");
+            return;
+        }
+
+        schedules.push({
+            id: Date.now() + Math.floor(Math.random() * 1000),
+            account: currentUsername,
+            type: eventType,
+            title: title,
+            day: day,
+            date: date,
+            time: time,
+            description: description,
+            reminder: reminder,
+            notified: false
+        });
+
+        saveSchedules();
+        document.getElementById("title").value = "";
+        document.getElementById("day").value = "";
+        document.getElementById("date").value = "";
+        document.getElementById("time").value = "";
+        document.getElementById("description").value = "";
+
+        displaySchedules();
+        alert("Schedule saved successfully. Keep the Timetable page open for the reminder.");
+        checkReminders();
+    }
+
+    window.saveSchedule = saveSchedule;
+    window.enableNotifications = enableNotifications;
+
+    /* ---------- DISPLAY ---------- */
+    function displaySchedules() {
+        var list = document.getElementById("scheduleList");
+        if (!list) return;
+        list.innerHTML = "";
+
+        if (schedules.length === 0) {
+            list.innerHTML = '<div class="no-events">No schedule added yet.</div>';
+            return;
+        }
+
+        schedules.sort(function (a, b) {
+            return new Date(a.date + "T" + a.time) - new Date(b.date + "T" + b.time);
+        });
+
+        schedules.forEach(function (item, index) {
+            var eventDate = new Date(item.date + "T" + item.time);
+            var now = new Date();
+            var timeClass = eventDate < now ? "past" : "upcoming";
+            var timeText = eventDate < now ? "Completed" : "Upcoming";
+            list.innerHTML +=
+                '<div class="event-card">' +
+                    '<span class="event-type">' + escapeHtml(item.type || "Class") + '</span>' +
+                    '<h3>' + escapeHtml(item.title) + '</h3>' +
+                    '<p>📅 <strong>Day:</strong> ' + escapeHtml(item.day || "Not specified") + '</p>' +
+                    '<p>🗓️ <strong>Date:</strong> ' + escapeHtml(item.date) + '</p>' +
+                    '<p>⏰ <strong>Time:</strong> ' + escapeHtml(item.time) + '</p>' +
+                    '<p class="' + timeClass + '">' + timeText + '</p>' +
+                    (item.description ? '<p>📝 <strong>Details:</strong> ' + escapeHtml(item.description) + '</p>' : '') +
+                    '<p>🔔 <strong>Reminder:</strong> ' + getReminderText(Number(item.reminder)) + '</p>' +
+                    '<button class="delete-btn" onclick="deleteSchedule(' + index + ')">🗑 Delete</button>' +
+                '</div>';
+        });
+    }
+
+    function escapeHtml(value) {
+        return String(value == null ? "" : value)
+            .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function getReminderText(minutes) {
+        if (minutes === 0) return "At scheduled time";
+        if (minutes === 60) return "1 hour before";
+        if (minutes === 1440) return "1 day before";
+        return minutes + " minutes before";
+    }
+
+    function deleteSchedule(index) {
+        if (!confirm("Do you want to delete this schedule?")) return;
+        schedules.splice(index, 1);
+        saveSchedules();
+        displaySchedules();
+    }
+    window.deleteSchedule = deleteSchedule;
+
+    /* ---------- RELIABLE REMINDER CHECK ---------- */
+    function checkReminders() {
+        if (localStorage.getItem("isLoggedIn") !== "true" || Portal.getCurrentUsername() !== currentUsername) return;
+
+        var now = Date.now();
+        var changed = false;
+
+        schedules.forEach(function (item) {
+            if (item.account && item.account !== currentUsername) return;
+            if (item.notified) return;
+
+            var eventDate = new Date(item.date + "T" + item.time);
+            if (isNaN(eventDate.getTime())) return;
+
+            var reminderMinutes = Number(item.reminder) || 0;
+            var reminderAt = eventDate.getTime() - (reminderMinutes * 60 * 1000);
+            /* A 10-minute catch-up window helps after a temporary mobile timer
+               suspension. The reminder is still sent only once. */
+            var endWindow = eventDate.getTime() + (10 * 60 * 1000);
+
+            if (now >= reminderAt && now <= endWindow) {
+                showPopupReminder(item);
+                item.notified = true;
+                item.notifiedAt = new Date().toISOString();
+                changed = true;
+            }
+        });
+
+        if (changed) {
+            saveSchedules();
+            displaySchedules();
+        }
+    }
+
+    /* Check immediately, every 5 seconds, and whenever the page becomes
+       visible/focused again. */
+    displaySchedules();
+    checkReminders();
+    setInterval(checkReminders, 5000);
+    document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) checkReminders();
+    });
+    window.addEventListener("focus", checkReminders);
+}
+</script>
+
+
+</body>
+
+</html>

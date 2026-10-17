@@ -1,0 +1,16 @@
+{
+  "name": "Student Portal",
+  "short_name": "Student Portal",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "1254x1254",
+      "type": "image/png"
+    }
+  ]
+}
